@@ -14,7 +14,7 @@ public class Main {
         int serverPort;
         int inPort;
 
-        System.out.print("server Ip: ");
+        System.out.print("server IP: ");
         serverIp = sc.next();
 
         System.out.print("server port: ");
