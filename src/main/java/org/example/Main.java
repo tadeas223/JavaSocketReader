@@ -1,6 +1,7 @@
 package org.example;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintStream;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -32,8 +33,8 @@ public class Main {
 
         Socket inSocket = serverSocket.accept();
 
-        Scanner scIn = new Scanner(inSocket.getInputStream());
-        Scanner scOut = new Scanner(outSocket.getInputStream());
+        InputStream inStream = inSocket.getInputStream();
+        InputStream outStream = outSocket.getInputStream();
 
         PrintStream prtIn = new PrintStream(inSocket.getOutputStream());
         PrintStream prtOut = new PrintStream(outSocket.getOutputStream());
@@ -42,11 +43,16 @@ public class Main {
             @Override
             public void run() {
                 while (true){
-                    String msg = scIn.nextLine();
+                    int b = 0;
+                    try {
+                        b = inStream.read();
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
 
-                    System.out.println(msg);
+                    System.out.print((char)b);
 
-                    prtOut.println(msg);
+                    prtOut.print((char)b);
                 }
             }
         });
@@ -54,11 +60,16 @@ public class Main {
         thread.start();
 
         while(true){
-            String msg = scOut.nextLine();
+            int b = 0;
+            try {
+                b = outStream.read();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
 
-            System.out.println(msg);
+            System.out.print((char)b);
 
-            prtIn.println(msg);
+            prtIn.print((char)b);
         }
 
     }
